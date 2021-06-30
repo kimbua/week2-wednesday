@@ -58,6 +58,33 @@ function removeTask(event) {
   function dragEnd(event) {
     event.target.classList.remove("invisible");
   }
-  document.getElementsByTagName(`body`).addEventListener("click", function(event) {
-      alert(event.target.nodeName);
-  })
+  function dragEnter(event) {
+    if (event.target.classList.contains("dropzone")) {
+      event.target.classList.add("hovered");
+    }
+  }
+  
+  function dragOver(event) {
+    event.preventDefault(); // https://stackoverflow.com/a/35428657 
+  }
+  
+  function dragLeave(event) {
+     event.target.classList.remove("hovered");
+  }
+  
+  function dragDrop(event) {
+    event.target.classList.remove("hovered");
+    // event represents the column
+    // Add the task to the right child. Inspect the element to find the ul is index 3 in childnodes.
+    event.target.childNodes[3].append(task);
+  }
+  
+  var dropzones = document.getElementsByClassName("dropzone");
+  
+  for (var index = 0; index < dropzones.length; index++) {
+    const dropzone = dropzones[index];
+    dropzone.addEventListener("dragenter", dragEnter);
+    dropzone.addEventListener("dragover", dragOver);
+    dropzone.addEventListener("dragleave", dragLeave);
+    dropzone.addEventListener("drop", dragDrop);
+  }
